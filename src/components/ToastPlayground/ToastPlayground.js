@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from '../Button';
+import Toast from '../Toast';
 
 import styles from './ToastPlayground.module.css';
 
@@ -10,13 +11,21 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [currentVariant, setCurrentVariant] = React.useState(VARIANT_OPTIONS[0]);
 
+  const [isPreviewEnabled, setIsPreviewEnabled] = React.useState(false);
+
   return (
     <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-
+      {isPreviewEnabled && 
+        <Toast
+          variant={currentVariant}
+          onClose={() => setIsPreviewEnabled(false)}>
+            {message}
+        </Toast>
+      }
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
           <label
@@ -63,7 +72,7 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button onClick={() => console.log({currentVariant, message})}>
+            <Button onClick={() => setIsPreviewEnabled(true)}>
               Pop Toast!
             </Button>
           </div>
