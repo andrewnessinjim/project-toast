@@ -1,17 +1,31 @@
 import React from 'react';
 
 import Button from '../Button';
-import Toast from '../Toast';
 
 import styles from './ToastPlayground.module.css';
+import ToastShelf from '../ToastShelf';
+import useToasts from '../../hooks/useToasts';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [currentVariant, setCurrentVariant] = React.useState(VARIANT_OPTIONS[0]);
+  const {addToast, deleteToast, toasts} = useToasts();
 
-  const [isPreviewEnabled, setIsPreviewEnabled] = React.useState(false);
+  function resetForm() {
+    setMessage("");
+    setCurrentVariant(VARIANT_OPTIONS[0])
+  }
+
+  function addToastAndReset(e) {
+    e.preventDefault();
+    addToast({
+      variant: currentVariant,
+      message: message
+    });
+    resetForm();
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -19,14 +33,10 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-      {isPreviewEnabled && 
-        <Toast
-          variant={currentVariant}
-          onClose={() => setIsPreviewEnabled(false)}>
-            {message}
-        </Toast>
-      }
-      <div className={styles.controlsWrapper}>
+      <ToastShelf toasts={toasts} onAToastClose={deleteToast}/>
+      <form
+        className={styles.controlsWrapper}
+        onSubmit={addToastAndReset}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -36,7 +46,7 @@ function ToastPlayground() {
             Message
           </label>
           <div className={styles.inputWrapper}>
-            <textarea 
+            <textarea
               id="message"
               className={styles.messageInput}
               value={message}
@@ -50,20 +60,21 @@ function ToastPlayground() {
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
             {VARIANT_OPTIONS.map(variant => {
-              const id=`variant-${variant}`;
-              return(
-               <label htmlFor={id} key={id}>
-                <input
-                  id={id}
-                  type="radio"
-                  name="variant"
-                  value={variant}
-                  checked={currentVariant === variant}
-                  onChange={() => setCurrentVariant(variant)}
-                />
-                {variant}
-             </label>
-            )})}
+              const id = `variant-${variant}`;
+              return (
+                <label htmlFor={id} key={id}>
+                  <input
+                    id={id}
+                    type="radio"
+                    name="variant"
+                    value={variant}
+                    checked={currentVariant === variant}
+                    onChange={() => setCurrentVariant(variant)}
+                  />
+                  {variant}
+                </label>
+              )
+            })}
           </div>
         </div>
 
@@ -72,12 +83,12 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button onClick={() => setIsPreviewEnabled(true)}>
+            <Button>
               Pop Toast!
             </Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
