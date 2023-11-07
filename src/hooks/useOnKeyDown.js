@@ -4,7 +4,7 @@ function useOnKeyDown(key, task) {
     React.useEffect(() => {
         function handleKeyDown(event) {
             if (event.code === key) {
-                task();
+                task(event);
             }
         }
 
