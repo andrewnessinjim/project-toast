@@ -9,8 +9,11 @@ function ToastShelf({toasts, onAToastClose}) {
       {toasts.map(toast => {
         return (
           <li key={toast.id} className={styles.toastWrapper}>
-            <Toast variant={toast.variant} onClose={() => onAToastClose(toast.id)}>
-              {toast.message}
+            <Toast
+              id={toast.id}
+              variant={toast.variant}
+              onClose={onAToastClose}>
+                {toast.message}
             </Toast>
           </li>
         )
