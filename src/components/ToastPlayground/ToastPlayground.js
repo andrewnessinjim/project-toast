@@ -11,20 +11,20 @@ const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [currentVariant, setCurrentVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const {deleteToast, addToast, getToasts} = React.useContext(ToastsContext)
+  const {createToast} = React.useContext(ToastsContext)
 
-  function resetForm() {
+  function reset() {
     setMessage("");
     setCurrentVariant(VARIANT_OPTIONS[0])
   }
 
-  function addToastAndReset(e) {
+  function createToastAndReset(e) {
     e.preventDefault();
-    addToast({
+    createToast({
       variant: currentVariant,
       message: message
     });
-    resetForm();
+    reset();
   }
 
   return (
@@ -33,10 +33,10 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-      <ToastShelf toasts={getToasts()} onAToastClose={deleteToast}/>
+      <ToastShelf/>
       <form
         className={styles.controlsWrapper}
-        onSubmit={addToastAndReset}>
+        onSubmit={createToastAndReset}>
         <div className={styles.row}>
           <label
             htmlFor="message"
