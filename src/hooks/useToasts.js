@@ -22,7 +22,11 @@ function useToasts() {
         setToasts(nextToasts);
     }
 
-    return {deleteToast, addToast, toasts};
+    function getToasts() {
+        return toasts;
+    }
+
+    return {deleteToast, addToast, getToasts};
 }
 
 export default useToasts;
