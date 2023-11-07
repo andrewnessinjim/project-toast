@@ -3,21 +3,11 @@ import React from 'react';
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
 import  { ToastsContext } from '../ToastProvider';
+import useOnKeyDown from '../../hooks/useOnKeyDown';
 
 function ToastShelf() {
   const {toasts, dismissAllToasts} = React.useContext(ToastsContext);
-
-  React.useEffect(() => {
-    function dismissIfEsc(event) {
-      if(event.code === "Escape"){
-        dismissAllToasts();
-      }
-    }
-
-    window.addEventListener("keydown", dismissIfEsc);
-
-    return () => window.removeEventListener("keydown", dismissIfEsc);
-  }, [dismissAllToasts]);
+  useOnKeyDown("Escape", dismissAllToasts)
 
   return (
     <ol className={styles.wrapper}
